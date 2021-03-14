@@ -118,13 +118,13 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           cd target/${{ matrix.triple }}/release
-          tar -czvf ../../../mqttui-${{ matrix.triple }}.tar.gz mqttui
+          tar -czvf ../../../sun-sets-gtk-theme-${{ matrix.triple }}.tar.gz sun-sets-gtk-theme
           cd -
       - name: Pack release (windows)
         if: runner.os == 'Windows'
         run: |
           cd target/${{ matrix.triple }}/release
-          7z a ../../../mqttui-${{ matrix.triple }}.zip mqttui.exe
+          7z a ../../../sun-sets-gtk-theme-${{ matrix.triple }}.zip sun-sets-gtk-theme.exe
           cd -
 
       - name: Upload Artifact
