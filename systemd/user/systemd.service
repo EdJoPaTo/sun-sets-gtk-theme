@@ -2,7 +2,7 @@
 Description=Set GTK Theme based on the sun position
 
 [Service]
-ExecStart=%h/.cargo/bin/sun-sets-gtk-theme --dark-theme Adwaita-dark --light-theme Adwaita
+ExecStart=%h/.local/bin/sun-sets-gtk-theme --dark-theme Adwaita-dark --light-theme Adwaita
 
 [Install]
 WantedBy=default.target
