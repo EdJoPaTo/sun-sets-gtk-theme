@@ -6,13 +6,14 @@ use std::thread::sleep;
 use chrono::{DateTime, FixedOffset};
 
 mod cli;
+mod heliocron_config;
 mod theme;
 mod time;
 
 fn main() {
     let matches = cli::build().get_matches();
 
-    let coordinates = cli::load_coordinates(&matches);
+    let coordinates = heliocron_config::load_coordinates(&matches);
 
     let theme_light = matches.value_of("light-theme").unwrap();
     let theme_dark = matches.value_of("dark-theme").unwrap();
