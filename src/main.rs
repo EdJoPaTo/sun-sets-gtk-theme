@@ -37,7 +37,7 @@ fn main() {
 fn set_theme(theme: &str) {
     let current = theme::current().unwrap();
     if current == theme {
-        println!("theme is already '{}'.", theme)
+        println!("theme is already '{}'.", theme);
     } else {
         println!("set theme '{}' (was '{}')", theme, current);
         theme::set(theme).unwrap();

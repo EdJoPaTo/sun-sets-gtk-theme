@@ -40,9 +40,9 @@ fn next_event(
     let mut attempt = 1;
 
     loop {
-        let sol = SolarCalculations::new(date, coordinates.to_owned());
+        let sol = SolarCalculations::new(date, *coordinates);
 
-        if let Some(event_time) = sol.calculate_event_time(event.to_owned()).datetime {
+        if let Some(event_time) = sol.calculate_event_time(event.clone()).datetime {
             if event_time > minimum_date {
                 return event_time;
             }
