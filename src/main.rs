@@ -48,9 +48,16 @@ fn set_theme(theme: &str) {
 fn sleep_until(target: DateTime<FixedOffset>) {
     let local_target: DateTime<chrono::Local> = target.into();
     println!("sleep until {}...", local_target);
-
-    let now: DateTime<FixedOffset> = chrono::Local::now().into();
-    if let Ok(duration) = target.sub(now).to_std() {
-        sleep(duration);
+    loop {
+        // Check current time regularly.
+        // When the device gets suspended the sleep also seems to be paused -> wrong times. Checking regularly prevents this
+        let now: DateTime<FixedOffset> = chrono::Local::now().into();
+        let remaining = target.sub(now).to_std().unwrap_or_default();
+        if remaining.as_secs() > 5 {
+            sleep(std::time::Duration::from_secs(5));
+        } else {
+            sleep(remaining);
+            break;
+        }
     }
 }
