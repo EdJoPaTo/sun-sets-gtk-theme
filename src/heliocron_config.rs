@@ -15,7 +15,7 @@ impl HeliocronConfig {
         let path = dirs_next::config_dir()?.join("heliocron.toml");
         fs::read_to_string(path)
             .ok()
-            .and_then(|content| toml::from_str::<HeliocronConfig>(&content).ok())
+            .and_then(|content| toml::from_str(&content).ok())
     }
 }
 
