@@ -1,14 +1,11 @@
-use clap::{App, AppSettings, Arg};
+use clap::{app_from_crate, App, Arg};
 
 #[must_use]
-pub fn build() -> App<'static, 'static> {
-    App::new("Sun sets GTK theme")
-        .version(env!("CARGO_PKG_VERSION"))
-        .author(env!("CARGO_PKG_AUTHORS"))
-        .about(env!("CARGO_PKG_DESCRIPTION"))
-        .global_setting(AppSettings::ColoredHelp)
+pub fn build() -> App<'static> {
+    app_from_crate!()
+        .name("Sun sets GTK theme")
         .arg(
-            Arg::with_name("latitude")
+            Arg::new("latitude")
                 .value_name("NUMBER")
                 .long("latitude")
                 .takes_value(true)
@@ -17,7 +14,7 @@ pub fn build() -> App<'static, 'static> {
                 .long_help("Latitude of the position where the sun position is calculated from. Is loaded from ~/.config/heliocron.toml when specified"),
         )
         .arg(
-            Arg::with_name("longitude")
+            Arg::new("longitude")
                 .value_name("NUMBER")
                 .long("longitude")
                 .takes_value(true)
@@ -26,21 +23,26 @@ pub fn build() -> App<'static, 'static> {
                 .long_help("Longitude of the position where the sun position is calculated from. Is loaded from ~/.config/heliocron.toml when specified"),
         )
         .arg(
-            Arg::with_name("dark-theme")
+            Arg::new("dark-theme")
                 .value_name("TEXT")
-                .short("d")
+                .short('d')
                 .long("dark-theme")
                 .takes_value(true)
                 .default_value("Adwaita-dark")
                 .help("GTK theme to be set when its dark outside"),
         )
         .arg(
-            Arg::with_name("light-theme")
+            Arg::new("light-theme")
                 .value_name("TEXT")
-                .short("l")
+                .short('l')
                 .long("light-theme")
                 .takes_value(true)
                 .default_value("Adwaita")
                 .help("GTK theme to be set when its bright outside"),
         )
+}
+
+#[test]
+fn verify_app() {
+    build().debug_assert();
 }

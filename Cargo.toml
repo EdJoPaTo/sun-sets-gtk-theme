@@ -5,8 +5,7 @@ version = "0.1.0"
 license = "MIT"
 repository = "https://github.com/EdJoPaTo/sun-sets-gtk-theme"
 authors = ["EdJoPaTo <sun-sets-gtk-theme-rust@edjopato.de>"]
-edition = "2018"
-
+edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [profile.release]
@@ -15,18 +14,13 @@ codegen-units = 1
 lto = true
 
 [build-dependencies]
-clap = "2"
+clap = { version = "3", features = ["cargo"] }
+clap_complete = "3"
 
 [dependencies]
+clap = { version = "3", features = ["cargo", "wrap_help"] }
 chrono = "0.4"
 dirs-next = "2"
 heliocron = "0.5"
 toml = "0.5"
-
-[dependencies.clap]
-version = "2"
-features = ["wrap_help"]
-
-[dependencies.serde]
-version = "1"
-features = ["derive"]
+serde = {version = "1", features = ["derive"]}
