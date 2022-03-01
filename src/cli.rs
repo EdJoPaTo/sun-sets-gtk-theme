@@ -1,13 +1,16 @@
-use clap::{app_from_crate, App, Arg};
+use clap::{command, Arg, Command, ValueHint};
 
+#[allow(clippy::too_many_lines)]
 #[must_use]
-pub fn build() -> App<'static> {
-    app_from_crate!()
+pub fn build() -> Command<'static> {
+    command!()
         .name("Sun sets GTK theme")
         .arg(
             Arg::new("latitude")
-                .value_name("NUMBER")
                 .long("latitude")
+                .env("LATITUDE")
+                .value_hint(ValueHint::Other)
+                .value_name("NUMBER")
                 .takes_value(true)
                 .default_value("51.4769N")
                 .help("Latitude of the position where the sun position is calculated from")
@@ -15,8 +18,10 @@ pub fn build() -> App<'static> {
         )
         .arg(
             Arg::new("longitude")
-                .value_name("NUMBER")
                 .long("longitude")
+                .env("LONGITUDE")
+                .value_hint(ValueHint::Other)
+                .value_name("NUMBER")
                 .takes_value(true)
                 .default_value("0.0005W")
                 .help("Longitude of the position where the sun position is calculated from")
@@ -24,18 +29,22 @@ pub fn build() -> App<'static> {
         )
         .arg(
             Arg::new("dark-theme")
-                .value_name("TEXT")
                 .short('d')
                 .long("dark-theme")
+                .env("DARK_THEME")
+                .value_hint(ValueHint::Other)
+                .value_name("TEXT")
                 .takes_value(true)
                 .default_value("Adwaita-dark")
                 .help("GTK theme to be set when its dark outside"),
         )
         .arg(
             Arg::new("light-theme")
-                .value_name("TEXT")
                 .short('l')
                 .long("light-theme")
+                .env("LIGHT_THEME")
+                .value_hint(ValueHint::Other)
+                .value_name("TEXT")
                 .takes_value(true)
                 .default_value("Adwaita")
                 .help("GTK theme to be set when its bright outside"),
@@ -43,6 +52,6 @@ pub fn build() -> App<'static> {
 }
 
 #[test]
-fn verify_app() {
+fn verify() {
     build().debug_assert();
 }
