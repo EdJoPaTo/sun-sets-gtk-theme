@@ -6,6 +6,7 @@ use std::thread::sleep;
 use chrono::{DateTime, FixedOffset};
 
 mod cli;
+mod color_scheme;
 mod heliocron_config;
 mod theme;
 mod time;
@@ -25,13 +26,25 @@ fn main() {
 
         if next_end < next_begin {
             println!("its day now");
+            set_scheme("default");
             set_theme(theme_light);
             sleep_until(next_end);
         } else {
             println!("its night now");
+            set_scheme("prefer-dark");
             set_theme(theme_dark);
             sleep_until(next_begin);
         }
+    }
+}
+
+fn set_scheme(scheme: &str) {
+    let current = color_scheme::current().unwrap();
+    if current == scheme {
+        println!("color-scheme is already '{}'.", scheme);
+    } else {
+        println!("color-scheme '{}' (was '{}')", scheme, current);
+        color_scheme::set(scheme).unwrap();
     }
 }
 
