@@ -1,12 +1,13 @@
 # Sun sets GTK theme
 
-Set GTK Theme based on the sun position
-
+> Set GTK Theme based on the sun position
 
 This was a bodge I used when Gnome 40 was released and forced all extensions to update their GUIs to GTK4 (which broke existing GTK3 ones).
-I was asked about it so I set this repo to public.
-It was never intended to be used but it might work out for you.
+I was asked about it, so I set this repo to public.
+It was never intended to be used, but it might work out for you.
 Good luck!
+
+Update: I adapted it to work with Gnome 42 and its color-scheme light/dark.
 
 # Alternatives
 
