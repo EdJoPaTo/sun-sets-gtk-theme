@@ -21,6 +21,6 @@ clap_complete = "3"
 clap = { version = "3", features = ["cargo", "env", "wrap_help"] }
 chrono = "0.4"
 dirs-next = "2"
-heliocron = "0.5"
+heliocron = "0.6"
 toml = "0.5"
 serde = {version = "1", features = ["derive"]}
