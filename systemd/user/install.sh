@@ -16,7 +16,7 @@ mkdir -p "$CONFIG_DIR/systemd/user/" "$HOME/.local/bin"
 nice cargo build --release --locked
 
 # systemd
-cp -uv "systemd/user/systemd.service" "$CONFIG_DIR/systemd/user/$name.service"
+cp -v "systemd/user/service" "$CONFIG_DIR/systemd/user/$name.service"
 systemctl --user daemon-reload
 
 # stop, replace and start new version
