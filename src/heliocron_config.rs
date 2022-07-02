@@ -23,7 +23,9 @@ pub fn load_coordinates(matches: &ArgMatches) -> Coordinates {
     let (latitude, longitude) =
         HeliocronConfig::load().map_or((None, None), |config| (config.latitude, config.longitude));
 
-    let latitude = latitude.unwrap_or_else(|| matches.value_of("latitude").unwrap().to_owned());
-    let longitude = longitude.unwrap_or_else(|| matches.value_of("longitude").unwrap().to_owned());
+    let latitude =
+        latitude.unwrap_or_else(|| matches.get_one::<String>("latitude").unwrap().clone());
+    let longitude =
+        longitude.unwrap_or_else(|| matches.get_one::<String>("longitude").unwrap().clone());
     Coordinates::from_decimal_degrees(&latitude, &longitude).unwrap()
 }

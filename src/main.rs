@@ -16,8 +16,8 @@ fn main() {
 
     let coordinates = heliocron_config::load_coordinates(&matches);
 
-    let theme_light = matches.value_of("light-theme").unwrap();
-    let theme_dark = matches.value_of("dark-theme").unwrap();
+    let theme_light = matches.get_one::<String>("light-theme").unwrap();
+    let theme_dark = matches.get_one::<String>("dark-theme").unwrap();
 
     loop {
         let now = chrono::Local::now();
