@@ -25,7 +25,7 @@ jobs:
           - toolchain: beta
             os: ubuntu-22.04
             features: --all-features
-            clippyargs: -W clippy::pedantic -W clippy::nursery -W clippy::cargo
+            clippyargs: -W clippy::pedantic -W clippy::nursery
           - toolchain: nightly
             os: ubuntu-22.04
             features: --all-features
