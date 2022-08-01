@@ -15,7 +15,7 @@ jobs:
         toolchain:
           - stable
         os:
-          - ubuntu-20.04
+          - ubuntu-22.04
         clippyargs:
           - -D clippy::pedantic -D warnings
         features:
@@ -23,11 +23,11 @@ jobs:
         include:
           # Check future versions and maybe get some glances on soon to be lints
           - toolchain: beta
-            os: ubuntu-20.04
+            os: ubuntu-22.04
             features: --all-features
             clippyargs: -W clippy::pedantic -W clippy::nursery -W clippy::cargo
           - toolchain: nightly
-            os: ubuntu-20.04
+            os: ubuntu-22.04
             features: --all-features
             clippyargs: -W clippy::pedantic
     steps:
@@ -74,15 +74,15 @@ jobs:
       matrix:
         include:
           - triple: x86_64-unknown-linux-gnu
-            os: ubuntu-20.04
+            os: ubuntu-22.04
           - triple: aarch64-unknown-linux-gnu
-            os: ubuntu-20.04
+            os: ubuntu-22.04
           - triple: armv7-unknown-linux-gnueabihf
-            os: ubuntu-20.04
+            os: ubuntu-22.04
           - triple: arm-unknown-linux-gnueabihf
-            os: ubuntu-20.04
+            os: ubuntu-22.04
           - triple: riscv64gc-unknown-linux-gnu
-            os: ubuntu-20.04
+            os: ubuntu-22.04
     steps:
       - name: Setup Rust
         uses: actions-rs/toolchain@v1
