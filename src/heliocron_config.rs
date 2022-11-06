@@ -12,9 +12,8 @@ pub struct HeliocronConfig {
 impl HeliocronConfig {
     pub fn load() -> Option<Self> {
         let path = dirs_next::config_dir()?.join("heliocron.toml");
-        fs::read_to_string(path)
-            .ok()
-            .and_then(|content| toml::from_str(&content).ok())
+        let content = fs::read_to_string(path).ok()?;
+        toml::from_str(&content).ok()
     }
 }
 
