@@ -4,6 +4,7 @@ use std::ops::Sub;
 use std::thread::sleep;
 
 use chrono::{DateTime, FixedOffset};
+use clap::Parser;
 
 mod cli;
 mod color_scheme;
@@ -12,12 +13,12 @@ mod theme;
 mod time;
 
 fn main() {
-    let matches = cli::build().get_matches();
+    let matches = cli::Cli::parse();
 
-    let coordinates = heliocron_config::load_coordinates(&matches);
+    let coordinates = heliocron_config::load_coordinates(matches.latitude, matches.longitude);
 
-    let theme_light = matches.get_one::<String>("light-theme").unwrap();
-    let theme_dark = matches.get_one::<String>("dark-theme").unwrap();
+    let theme_light = &matches.light_theme;
+    let theme_dark = &matches.dark_theme;
 
     loop {
         let now = chrono::Local::now();

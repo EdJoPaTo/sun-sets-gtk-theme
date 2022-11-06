@@ -1,6 +1,5 @@
 use std::fs;
 
-use clap::ArgMatches;
 use heliocron::structs::Coordinates;
 use serde::Deserialize;
 
@@ -19,13 +18,11 @@ impl HeliocronConfig {
     }
 }
 
-pub fn load_coordinates(matches: &ArgMatches) -> Coordinates {
+pub fn load_coordinates(cli_latitude: String, cli_longitude: String) -> Coordinates {
     let (latitude, longitude) =
         HeliocronConfig::load().map_or((None, None), |config| (config.latitude, config.longitude));
 
-    let latitude =
-        latitude.unwrap_or_else(|| matches.get_one::<String>("latitude").unwrap().clone());
-    let longitude =
-        longitude.unwrap_or_else(|| matches.get_one::<String>("longitude").unwrap().clone());
+    let latitude = latitude.unwrap_or(cli_latitude);
+    let longitude = longitude.unwrap_or(cli_longitude);
     Coordinates::from_decimal_degrees(&latitude, &longitude).unwrap()
 }
