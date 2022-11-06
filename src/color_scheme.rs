@@ -14,7 +14,7 @@ pub fn current() -> Result<String, Box<dyn Error>> {
         let result = trimmed[1..trimmed.len() - 1].to_string();
         Ok(result)
     } else {
-        let text = format!("gsettings failed to execute {:?}", output);
+        let text = format!("gsettings failed to execute {output:?}");
         let error = std::io::Error::new(std::io::ErrorKind::Other, text);
         Err(Box::new(error))
     }
@@ -31,7 +31,7 @@ pub fn set(scheme_name: &str) -> Result<(), Box<dyn Error>> {
     if output.status.success() {
         Ok(())
     } else {
-        let text = format!("gsettings failed to execute {:?}", output);
+        let text = format!("gsettings failed to execute {output:?}");
         let error = std::io::Error::new(std::io::ErrorKind::Other, text);
         Err(Box::new(error))
     }

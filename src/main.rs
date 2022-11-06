@@ -42,9 +42,9 @@ fn main() {
 fn set_scheme(scheme: &str) {
     let current = color_scheme::current().unwrap();
     if current == scheme {
-        println!("color-scheme is already '{}'.", scheme);
+        println!("color-scheme is already '{scheme}'.");
     } else {
-        println!("color-scheme '{}' (was '{}')", scheme, current);
+        println!("color-scheme '{scheme}' (was '{current}')");
         color_scheme::set(scheme).unwrap();
     }
 }
@@ -52,16 +52,16 @@ fn set_scheme(scheme: &str) {
 fn set_theme(theme: &str) {
     let current = theme::current().unwrap();
     if current == theme {
-        println!("theme is already '{}'.", theme);
+        println!("theme is already '{theme}'.");
     } else {
-        println!("set theme '{}' (was '{}')", theme, current);
+        println!("set theme '{theme}' (was '{current}')");
         theme::set(theme).unwrap();
     }
 }
 
 fn sleep_until(target: DateTime<FixedOffset>) {
     let local_target: DateTime<chrono::Local> = target.into();
-    println!("sleep until {}...", local_target);
+    println!("sleep until {local_target}...");
     loop {
         // Check current time regularly.
         // When the device gets suspended the sleep also seems to be paused -> wrong times. Checking regularly prevents this
