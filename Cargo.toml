@@ -18,9 +18,6 @@ clap = { version = "4", features = ["deprecated", "derive", "env"] }
 clap_complete = "4"
 
 [dependencies]
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
 clap = { version = "4", features = ["deprecated", "derive", "env", "wrap_help"] }
-chrono = "0.4"
-dirs-next = "2"
-heliocron = "0.5"
-toml = "0.5"
-serde = {version = "1", features = ["derive"]}
+suncalc = "0.4"

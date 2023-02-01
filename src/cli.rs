@@ -4,8 +4,6 @@ use clap::{Parser, ValueHint};
 #[command(about, version)]
 pub struct Cli {
     /// Latitude of the position where the sun position is calculated from.
-    ///
-    /// Is loaded from ~/.config/heliocron.toml when specified
     #[arg(
         long,
         env,
@@ -15,8 +13,6 @@ pub struct Cli {
     pub latitude: String,
 
     /// Longitude of the position where the sun position is calculated from.
-    ///
-    /// Is loaded from ~/.config/heliocron.toml when specified
     #[arg(
         long,
         env,
