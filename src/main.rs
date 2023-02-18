@@ -3,7 +3,7 @@
 use std::ops::Sub;
 use std::thread::sleep;
 
-use chrono::NaiveDateTime;
+use chrono::{DateTime, TimeZone};
 use clap::Parser;
 
 mod cli;
@@ -22,7 +22,7 @@ fn main() {
     let theme_dark = &matches.dark_theme;
 
     loop {
-        let now = chrono::Local::now().naive_local();
+        let now = chrono::Local::now();
         let next_begin = time::next_begin_of_day(now, latitude, longitude);
         let next_end = time::next_end_of_day(now, latitude, longitude);
 
@@ -30,12 +30,12 @@ fn main() {
             println!("its day now");
             set_scheme("default");
             set_theme(theme_light);
-            sleep_until(next_end);
+            sleep_until(&next_end);
         } else {
             println!("its night now");
             set_scheme("prefer-dark");
             set_theme(theme_dark);
-            sleep_until(next_begin);
+            sleep_until(&next_begin);
         }
     }
 }
@@ -60,7 +60,8 @@ fn set_theme(theme: &str) {
     }
 }
 
-fn sleep_until(target: NaiveDateTime) {
+fn sleep_until<Tz: TimeZone>(target: &DateTime<Tz>) {
+    let target = target.naive_local();
     println!("sleep until {target}...");
     loop {
         // Check current time regularly.

@@ -1,6 +1,4 @@
-use std::ops::Add;
-
-use chrono::{Duration, NaiveDateTime, TimeZone, Utc};
+use chrono::{DateTime, Duration, Local, TimeZone};
 
 #[derive(Clone, Copy)]
 pub enum Event {
@@ -8,23 +6,30 @@ pub enum Event {
     EndOfDay,
 }
 
-pub fn next_begin_of_day(datetime: NaiveDateTime, latitude: f64, longitude: f64) -> NaiveDateTime {
+pub fn next_begin_of_day<Tz: TimeZone>(
+    datetime: DateTime<Tz>,
+    latitude: f64,
+    longitude: f64,
+) -> DateTime<Local> {
     next_event(datetime, Event::BeginOfDay, latitude, longitude)
 }
 
-pub fn next_end_of_day(datetime: NaiveDateTime, latitude: f64, longitude: f64) -> NaiveDateTime {
+pub fn next_end_of_day<Tz: TimeZone>(
+    datetime: DateTime<Tz>,
+    latitude: f64,
+    longitude: f64,
+) -> DateTime<Local> {
     next_event(datetime, Event::EndOfDay, latitude, longitude)
 }
 
-fn next_event(
-    datetime: NaiveDateTime,
+fn next_event<Tz: TimeZone>(
+    mut date: DateTime<Tz>,
     event: Event,
     latitude: f64,
     longitude: f64,
-) -> NaiveDateTime {
+) -> DateTime<Local> {
     // Prevent jumping of themes, prevent jumps in the next 5 minutes
-    let minimum_date = datetime.add(Duration::minutes(5)).timestamp_millis();
-    let mut date = datetime;
+    let minimum_date = date.timestamp_millis() + Duration::minutes(5).num_milliseconds();
     let mut attempt = 1;
 
     loop {
@@ -37,12 +42,12 @@ fn next_event(
         .0;
 
         if event_time > minimum_date {
-            return Utc.timestamp_millis_opt(event_time).unwrap().naive_utc();
+            return Local.timestamp_millis_opt(event_time).unwrap();
         }
 
         assert!(attempt < 500, "did not found next event in 500 iterations");
 
         attempt += 1;
-        date = date.add(chrono::Duration::hours(3));
+        date += chrono::Duration::hours(3);
     }
 }
