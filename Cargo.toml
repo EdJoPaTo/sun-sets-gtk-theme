@@ -20,4 +20,5 @@ clap_complete = "4"
 [dependencies]
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 clap = { version = "4", features = ["deprecated", "derive", "env", "wrap_help"] }
+gio = "0.17"
 suncalc = "0.4"

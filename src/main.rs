@@ -7,9 +7,8 @@ use chrono::{DateTime, TimeZone};
 use clap::Parser;
 
 mod cli;
-mod color_scheme;
+mod gsettings;
 mod location;
-mod theme;
 mod time;
 
 fn main() {
@@ -18,8 +17,7 @@ fn main() {
     let latitude = location::parse_latitude(&matches.latitude).expect("Latitude must be a positive value between 0.0 and 90.0 followed by a compass direction ('N' or 'S')");
     let longitude = location::parse_longitude(&matches.longitude).expect("Longitude must be a positive value between 0.0 and 180.0 followed by a compass direction ('W' or 'E')");
 
-    let theme_light = &matches.light_theme;
-    let theme_dark = &matches.dark_theme;
+    let gsettings = gsettings::Gsettings::new();
 
     loop {
         let now = chrono::Local::now();
@@ -28,35 +26,15 @@ fn main() {
 
         if next_end < next_begin {
             println!("its day now");
-            set_scheme("default");
-            set_theme(theme_light);
+            gsettings.set_color_scheme("default");
+            gsettings.set_theme(&matches.light_theme);
             sleep_until(&next_end);
         } else {
             println!("its night now");
-            set_scheme("prefer-dark");
-            set_theme(theme_dark);
+            gsettings.set_color_scheme("prefer-dark");
+            gsettings.set_theme(&matches.dark_theme);
             sleep_until(&next_begin);
         }
-    }
-}
-
-fn set_scheme(scheme: &str) {
-    let current = color_scheme::current().unwrap();
-    if current == scheme {
-        println!("color-scheme is already '{scheme}'.");
-    } else {
-        println!("color-scheme '{scheme}' (was '{current}')");
-        color_scheme::set(scheme).unwrap();
-    }
-}
-
-fn set_theme(theme: &str) {
-    let current = theme::current().unwrap();
-    if current == theme {
-        println!("theme is already '{theme}'.");
-    } else {
-        println!("set theme '{theme}' (was '{current}')");
-        theme::set(theme).unwrap();
     }
 }
 
