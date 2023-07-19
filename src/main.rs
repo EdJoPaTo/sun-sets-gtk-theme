@@ -3,7 +3,6 @@
 use std::ops::Sub;
 use std::thread::sleep;
 
-use chrono::{DateTime, TimeZone};
 use clap::Parser;
 
 mod cli;
@@ -24,33 +23,37 @@ fn main() {
         let next_begin = time::next_begin_of_day(now, latitude, longitude);
         let next_end = time::next_end_of_day(now, latitude, longitude);
 
-        if next_end < next_begin {
+        let sleep_until = if next_end < next_begin {
             println!("its day now");
             gsettings.set_color_scheme("default");
-            gsettings.set_theme(&matches.light_theme);
-            sleep_until(&next_end);
+            next_end
         } else {
             println!("its night now");
             gsettings.set_color_scheme("prefer-dark");
-            gsettings.set_theme(&matches.dark_theme);
-            sleep_until(&next_begin);
+            next_begin
         }
-    }
-}
+        .naive_local();
 
-fn sleep_until<Tz: TimeZone>(target: &DateTime<Tz>) {
-    let target = target.naive_local();
-    println!("sleep until {target}...");
-    loop {
-        // Check current time regularly.
-        // When the device gets suspended the sleep also seems to be paused -> wrong times. Checking regularly prevents this
-        let now = chrono::Local::now().naive_local();
-        let remaining = target.sub(now).to_std().unwrap_or_default();
-        if remaining.as_secs() > 5 {
-            sleep(std::time::Duration::from_secs(5));
-        } else {
-            sleep(remaining);
-            break;
+        println!("sleep until {sleep_until}...");
+
+        loop {
+            // Set theme based on color scheme
+            if gsettings.get_color_scheme().contains("dark") {
+                gsettings.set_theme(&matches.dark_theme);
+            } else {
+                gsettings.set_theme(&matches.light_theme);
+            }
+
+            // Check current time regularly.
+            // When the device gets suspended the sleep also seems to be paused -> wrong times. Checking regularly prevents this
+            let now = chrono::Local::now().naive_local();
+            let remaining = sleep_until.sub(now).to_std().unwrap_or_default();
+            if remaining.as_secs() > 2 {
+                sleep(std::time::Duration::from_secs(2));
+            } else {
+                sleep(remaining);
+                break;
+            }
         }
     }
 }

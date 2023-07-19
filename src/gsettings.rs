@@ -13,12 +13,14 @@ impl Gsettings {
 
     fn set(&self, key: &'static str, value: &str) {
         let current: String = self.0.get(key);
-        if current == value {
-            println!("{key} is already '{value}'.");
-        } else {
+        if current != value {
             println!("{key} '{value}' (was '{current}')");
             self.0.set(key, value).unwrap();
         }
+    }
+
+    pub fn get_color_scheme(&self) -> String {
+        self.0.get("color-scheme")
     }
 
     pub fn set_color_scheme(&self, scheme: &str) {
