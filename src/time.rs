@@ -51,3 +51,24 @@ fn next_event<Tz: TimeZone>(
         date += chrono::Duration::hours(3);
     }
 }
+
+#[test]
+fn inspect_times() {
+    let latitude = crate::location::parse_latitude("51.4769N").unwrap();
+    let longitude = crate::location::parse_longitude("0.0005W").unwrap();
+    dbg!(latitude, longitude);
+
+    let now = chrono::Local::now(); // .with_month(6).unwrap();
+    dbg!(&now);
+
+    let next_begin = next_begin_of_day(now, latitude, longitude);
+    dbg!(next_begin);
+
+    dbg!(&now);
+
+    let next_end = next_end_of_day(now, latitude, longitude);
+    dbg!(next_end);
+
+    dbg!(&now);
+    // panic!("Show the test output");
+}
