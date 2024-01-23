@@ -62,6 +62,9 @@ jobs:
       - name: Check docs
         run: cargo doc --verbose --locked --no-deps ${{ matrix.features }}
 
+      - name: Build
+        run: cargo build --verbose --locked --all-targets ${{ matrix.features }}
+
       - name: Run tests
         run: cargo test --verbose --locked ${{ matrix.features }}
 
@@ -116,7 +119,7 @@ jobs:
           | gzip --best > ${{ env.ARTIFACT_NAME }}.tar.gz
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.triple }}
           path: |
