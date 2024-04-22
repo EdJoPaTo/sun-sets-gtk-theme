@@ -115,6 +115,7 @@ jobs:
           LICENSE README.md
           systemd/*/service
           -C target/ completions/ -C ../
+          -C target/ manpages/ -C ../
           -C target/${{ matrix.triple }}/release/ sun-sets-gtk-theme
           | gzip --best > ${{ env.ARTIFACT_NAME }}.tar.gz
 
