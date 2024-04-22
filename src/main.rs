@@ -5,21 +5,17 @@ use clap::Parser;
 
 mod cli;
 mod gsettings;
-mod location;
 mod time;
 
 fn main() {
     let matches = cli::Cli::parse();
 
-    let latitude = location::parse_latitude(&matches.latitude).expect("Latitude must be a positive value between 0.0 and 90.0 followed by a compass direction ('N' or 'S')");
-    let longitude = location::parse_longitude(&matches.longitude).expect("Longitude must be a positive value between 0.0 and 180.0 followed by a compass direction ('W' or 'E')");
-
     let gsettings = gsettings::Gsettings::new();
 
     loop {
         let now = chrono::Local::now();
-        let next_begin = time::next_begin_of_day(now, latitude, longitude);
-        let next_end = time::next_end_of_day(now, latitude, longitude);
+        let next_begin = time::next_begin_of_day(now, matches.latitude, matches.longitude);
+        let next_end = time::next_end_of_day(now, matches.latitude, matches.longitude);
 
         let sleep_until = if next_end < next_begin {
             println!("its day now");

@@ -1,5 +1,7 @@
 use clap::{Parser, ValueHint};
 
+include!("location.rs");
+
 #[derive(Debug, Parser)]
 #[command(about, version)]
 pub struct Cli {
@@ -10,7 +12,7 @@ pub struct Cli {
         value_hint = ValueHint::Other,
         default_value = "51.4769N"
     )]
-    pub latitude: String,
+    pub latitude: Latitude,
 
     /// Longitude of the position where the sun position is calculated from.
     #[arg(
@@ -19,7 +21,7 @@ pub struct Cli {
         value_hint = ValueHint::Other,
         default_value = "0.0005W",
     )]
-    pub longitude: String,
+    pub longitude: Longitude,
 
     /// GTK theme to be set when its dark outside
     #[arg(

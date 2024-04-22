@@ -1,5 +1,7 @@
 use chrono::{DateTime, Duration, Local, TimeZone};
 
+use crate::cli::{Latitude, Longitude};
+
 #[derive(Clone, Copy)]
 pub enum Event {
     BeginOfDay,
@@ -8,16 +10,16 @@ pub enum Event {
 
 pub fn next_begin_of_day<Tz: TimeZone>(
     datetime: DateTime<Tz>,
-    latitude: f64,
-    longitude: f64,
+    latitude: Latitude,
+    longitude: Longitude,
 ) -> DateTime<Local> {
     next_event(datetime, Event::BeginOfDay, latitude, longitude)
 }
 
 pub fn next_end_of_day<Tz: TimeZone>(
     datetime: DateTime<Tz>,
-    latitude: f64,
-    longitude: f64,
+    latitude: Latitude,
+    longitude: Longitude,
 ) -> DateTime<Local> {
     next_event(datetime, Event::EndOfDay, latitude, longitude)
 }
@@ -25,8 +27,8 @@ pub fn next_end_of_day<Tz: TimeZone>(
 fn next_event<Tz: TimeZone>(
     mut date: DateTime<Tz>,
     event: Event,
-    latitude: f64,
-    longitude: f64,
+    latitude: Latitude,
+    longitude: Longitude,
 ) -> DateTime<Local> {
     // Prevent jumping of themes, prevent jumps in the next 5 minutes
     let minimum_date = date.timestamp_millis() + Duration::minutes(5).num_milliseconds();
@@ -34,7 +36,7 @@ fn next_event<Tz: TimeZone>(
 
     loop {
         let timestamp = suncalc::Timestamp(date.timestamp_millis());
-        let sun_times = suncalc::get_times(timestamp, latitude, longitude, None);
+        let sun_times = suncalc::get_times(timestamp, latitude.0, longitude.0, None);
         let event_time = match event {
             Event::BeginOfDay => sun_times.sunrise,
             Event::EndOfDay => sun_times.golden_hour,
@@ -54,8 +56,8 @@ fn next_event<Tz: TimeZone>(
 
 #[test]
 fn inspect_times() {
-    let latitude = crate::location::parse_latitude("51.4769N").unwrap();
-    let longitude = crate::location::parse_longitude("0.0005W").unwrap();
+    let latitude = "51.4769N".parse().unwrap();
+    let longitude = "0.0005W".parse().unwrap();
     dbg!(latitude, longitude);
 
     let now = chrono::Local::now(); // .with_month(6).unwrap();
