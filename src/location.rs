@@ -1,5 +1,5 @@
 fn parse_decimal_degrees(str: &str) -> Option<f64> {
-    str[..str.len() - 1]
+    str.get(..str.len().checked_sub(1)?)?
         .parse()
         .ok()
         .filter(|n: &f64| n.is_sign_positive())
