@@ -1,4 +1,4 @@
-use chrono::{DateTime, Duration, Local, TimeZone};
+use chrono::{DateTime, Local, TimeZone};
 
 use crate::cli::{Latitude, Longitude};
 
@@ -31,7 +31,7 @@ fn next_event<Tz: TimeZone>(
     longitude: Longitude,
 ) -> DateTime<Local> {
     // Prevent jumping of themes, prevent jumps in the next 5 minutes
-    let minimum_date = date.timestamp_millis() + Duration::minutes(5).num_milliseconds();
+    let minimum_date = date.timestamp_millis() + chrono::Duration::minutes(5).num_milliseconds();
     let mut attempt = 1;
 
     loop {
@@ -60,7 +60,7 @@ fn inspect_times() {
     let longitude = "0.0005W".parse().unwrap();
     dbg!(latitude, longitude);
 
-    let now = chrono::Local::now(); // .with_month(6).unwrap();
+    let now = Local::now(); // .with_month(6).unwrap();
     dbg!(&now);
 
     let next_begin = next_begin_of_day(now, latitude, longitude);
