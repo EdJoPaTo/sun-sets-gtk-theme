@@ -1,4 +1,4 @@
-name: Test and Build Rust
+name: Rust
 
 on:
   push:
@@ -9,16 +9,13 @@ jobs:
   rustfmt:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@nightly
         with:
-          toolchain: stable
           components: rustfmt
       - uses: actions/checkout@v4
       - run: cargo fmt --check --verbose
 
   clippy:
-    name: Clippy ${{ matrix.toolchain }}
     runs-on: ubuntu-latest
     continue-on-error: ${{ (matrix.toolchain == 'beta') || (matrix.toolchain == 'nightly') }}
     strategy:
@@ -32,18 +29,21 @@ jobs:
       RUSTFLAGS: --deny warnings
     steps:
       - run: sudo apt-get update && sudo apt-get install -y libglib2.0-dev
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@master
+        id: rust
         with:
           toolchain: ${{ matrix.toolchain }}
           components: clippy
       - uses: actions/checkout@v4
       - run: cargo fetch
+      - uses: actions/cache@v4
+        with:
+          key: clippy-${{ steps.rust.outputs.cachekey }}-${{ hashFiles('**/Cargo.*') }}
+          path: target/
       - run: cargo clippy --offline --all-targets
       - run: cargo doc --offline --no-deps
 
   test:
-    name: Test ${{ matrix.toolchain }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.toolchain == 'nightly' }}
     strategy:
@@ -57,12 +57,16 @@ jobs:
           - ubuntu-latest
     steps:
       - run: sudo apt-get update && sudo apt-get install -y libglib2.0-dev
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@master
+        id: rust
         with:
           toolchain: ${{ matrix.toolchain }}
       - uses: actions/checkout@v4
       - run: cargo fetch
+      - uses: actions/cache@v4
+        with:
+          key: test-${{ matrix.os }}-${{ steps.rust.outputs.cachekey }}-${{ hashFiles('**/Cargo.*') }}
+          path: target/
       - run: cargo build --offline --all-targets
       - run: cargo test --offline --no-fail-fast
 
@@ -81,10 +85,9 @@ jobs:
       RUSTFLAGS: --deny warnings
     steps:
       - run: sudo apt-get update && sudo apt-get install -y libglib2.0-dev
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@stable
+        id: rust
         with:
-          toolchain: stable
           targets: ${{ matrix.triple }}
 
       - uses: actions/checkout@v4
@@ -103,9 +106,12 @@ jobs:
           echo "ARTIFACT_NAME=$name" >> $GITHUB_ENV
 
       - run: cargo fetch --locked
+      - uses: actions/cache@v4
+        with:
+          key: release-${{ matrix.triple }}-${{ steps.rust.outputs.cachekey }}-${{ hashFiles('**/Cargo.*') }}
+          path: target/
 
-      - name: Build
-        run: cargo build --release --offline --target ${{ matrix.triple }}
+      - run: cargo build --release --offline --target ${{ matrix.triple }}
 
       - name: Package tar.gz (*nix)
         if: runner.os != 'Windows'
@@ -118,8 +124,7 @@ jobs:
           -C target/${{ matrix.triple }}/release/ sun-sets-gtk-theme
           | gzip --best > ${{ env.ARTIFACT_NAME }}.tar.gz
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.triple }}
           path: |
