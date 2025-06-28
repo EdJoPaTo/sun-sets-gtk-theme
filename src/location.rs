@@ -45,7 +45,7 @@ impl core::str::FromStr for Longitude {
 }
 
 #[test]
-fn test_parse_latitude() {
+fn parse_latitude() {
     let params = [
         (50.0, "50.0N"),
         (-50.0, "50.0S"),
@@ -61,7 +61,7 @@ fn test_parse_latitude() {
     }
 }
 #[test]
-fn test_parse_longitude() {
+fn parse_longitude() {
     let params = [
         (50.0, "50.0E"),
         (-50.0, "50.0W"),
