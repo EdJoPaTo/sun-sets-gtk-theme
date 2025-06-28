@@ -18,7 +18,7 @@ impl core::str::FromStr for Latitude {
             let val = parse_decimal_degrees(latitude).filter(|n: &f64| (0.0..=90.0).contains(n))?;
             match parse_compass_direction(latitude)? {
                 'n' => Some(val),
-                's' => Some(val * -1.0),
+                's' => Some(-val),
                 _ => None,
             }
         }
@@ -36,7 +36,7 @@ impl core::str::FromStr for Longitude {
                 parse_decimal_degrees(longitude).filter(|n: &f64| (0.0..=180.0).contains(n))?;
             match parse_compass_direction(longitude)? {
                 'e' => Some(val),
-                'w' => Some(val * -1.0),
+                'w' => Some(-val),
                 _ => None,
             }
         }
