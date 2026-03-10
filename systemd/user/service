@@ -3,6 +3,8 @@ Description=Set GTK Theme based on the sun position
 
 [Service]
 Type=exec
+Restart=on-failure
+RestartSec=20
 ExecStart=%h/.local/bin/sun-sets-gtk-theme
 #Environment=LATITUDE=51.4769N
 #Environment=LONGITUDE=0.0005W
