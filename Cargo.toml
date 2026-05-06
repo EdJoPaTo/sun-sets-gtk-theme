@@ -21,10 +21,10 @@ lto = true
 [build-dependencies]
 clap = { version = "4", features = ["deprecated", "derive", "env"] }
 clap_complete = "4"
-clap_mangen = "0.2"
+clap_mangen = "0.3"
 
 [dependencies]
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 clap = { version = "4", features = ["deprecated", "derive", "env", "wrap_help"] }
-gio = "0.21"
+gio = "0.22"
 suncalc = "0.4"
