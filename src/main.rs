@@ -1,7 +1,7 @@
-use std::ops::Sub;
+use std::ops::Sub as _;
 use std::thread::sleep;
 
-use clap::Parser;
+use clap::Parser as _;
 
 mod cli;
 mod gsettings;

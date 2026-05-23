@@ -1,4 +1,4 @@
-use gio::prelude::SettingsExtManual;
+use gio::prelude::SettingsExtManual as _;
 
 // See
 // /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
