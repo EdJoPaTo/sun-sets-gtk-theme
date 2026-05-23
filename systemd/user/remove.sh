@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
+set -u
 
 systemctl --user disable --now "sun-sets-gtk-theme.service"
 
